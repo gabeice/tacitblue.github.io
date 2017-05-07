@@ -144,4 +144,4 @@ $l.ajax({
 
 ### Demo
 
-A JavaScript version of the game Snake which uses DOMController to manipulate onscreen HTML elements can be accessed [here](url("./Demo/index.html")).
+A JavaScript version of the game Snake which uses DOMController to manipulate onscreen HTML elements can be accessed [here](http://google.com).
