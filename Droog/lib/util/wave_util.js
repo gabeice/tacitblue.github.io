@@ -1,21 +1,45 @@
 const d3 = require('d3');
 
-export const analyze = () => {
-  const ctx = new AudioContext();
-  const audio = document.getElementById('audio');
-  const audioSrc = ctx.createMediaElementSource(audio);
-  const analyser = ctx.createAnalyser();
-  audioSrc.connect(ctx.destination);
-  audioSrc.connect(analyser);
-  const frequencyData = new Uint8Array(analyser.frequencyBinCount);
+export const analyze = (micState) => {
+  if(micState === "on") {
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(stream => {
+      audioSrc.disconnect();
+      if(!window.micSrc) {
+        window.micSrc = ctx.createMediaStreamSource(stream);
+      }
+      micSrc.connect(analyzer);
+      const frequencyData = new Uint8Array(analyzer.frequencyBinCount);
 
-  function renderFrame() {
-     requestAnimationFrame(renderFrame);
-     analyser.getByteFrequencyData(frequencyData);
+      function renderFrame() {
+        requestAnimationFrame(renderFrame);
+        analyzer.getByteFrequencyData(frequencyData);
+      }
+
+      renderFrame();
+
+      window.ticker = setInterval(() => {
+        frequencyType(document.querySelector(".selected").innerText, frequencyData);
+      }, 100);
+    });
+  } else {
+    if(window.micSrc) {
+      micSrc.disconnect();
+    }
+    audioSrc.connect(ctx.destination);
+    audioSrc.connect(analyzer);
+    const frequencyData = new Uint8Array(analyzer.frequencyBinCount);
+
+    function renderFrame() {
+      requestAnimationFrame(renderFrame);
+      analyzer.getByteFrequencyData(frequencyData);
+    }
+
+    renderFrame();
+
+    window.ticker = setInterval(() => {
+      frequencyType(document.querySelector(".selected").innerText, frequencyData);
+    }, 100);
   }
-
-  renderFrame();
-  return frequencyData;
 };
 
 const average = function(numArray) {
@@ -88,4 +112,21 @@ export const showFrequencyCircle = (frequencyData) => {
 
     innermostElement(outerBar).appendChild(circle);
   });
+}
+
+export const frequencyType = function(selection, frequencyData) {
+  let showFrequency;
+
+  switch(selection) {
+    case "Grounded":
+    showFrequency = showFrequencyOsc;
+    break;
+    case "Floating":
+    showFrequency = showFrequencyMid;
+    break;
+    default:
+    showFrequency = showFrequencyCircle;
+  }
+
+  return showFrequency(frequencyData);
 }
