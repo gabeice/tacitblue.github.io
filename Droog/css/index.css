@@ -1,14 +1,20 @@
 body {
+  margin: 0px;
+  font-family: "Futura";
+}
+
+#body-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-family: "Futura";
   margin: 0px;
   background-color: lightgray;
 }
 
 h1 {
   font-size: 48px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 p {
@@ -24,6 +30,55 @@ ul {
   padding: 0px;
 }
 
+.modal {
+  display: none;
+  position: fixed;
+  opacity: 1;
+  z-index: 2;
+  border: 1px solid black;
+  background-color: white;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 50%;
+  width: 25%;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.modal p {
+  margin: 30px;
+}
+
+@keyframes widen {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 30%;
+  }
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+#underline {
+  height: 1px;
+  background-color: black;
+  width: 30%;
+  margin-bottom: 30px;
+  animation-duration: 4s;
+  animation-name: widen;
+}
+
 #main {
   display: flex;
   flex-direction: row;
@@ -37,6 +92,9 @@ ul {
   --top-red: 64;
   --top-green: 224;
   --top-blue: 208;
+
+  animation-name: fadein;
+  animation-duration: 3s;
 }
 
 #display {
@@ -222,4 +280,14 @@ ul {
 
 #microphone:hover {
   opacity: 0.7;
+}
+
+#footer {
+  margin-bottom: 20px;
+}
+
+#footer a {
+  text-decoration: none;
+  margin: 10px;
+  color: gray;
 }
