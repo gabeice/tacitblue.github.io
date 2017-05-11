@@ -6,7 +6,6 @@ import {
   frequencyType
 } from './util/wave_util';
 
-import { toColor } from './util/color_util';
 import { addTypeSelectors } from './listeners/type_selector';
 import { addColorSelectors } from './listeners/color_selector';
 import { setButtons, addMicListener } from './listeners/play_listeners';
@@ -15,7 +14,7 @@ import { setupAudio } from './listeners/audio_listener';
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById('about');
   const aboutLink = document.getElementById('about-link');
-  const bodyContent = document.getElementById("body-content")
+  const bodyContent = document.getElementById("body-content");
 
   aboutLink.addEventListener("click", (e) => {
     e.preventDefault();

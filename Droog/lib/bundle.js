@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -79,7 +79,7 @@ Object.defineProperty(exports, "__esModule", {
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var d3 = __webpack_require__(9);
+var d3 = __webpack_require__(8);
 
 var analyze = exports.analyze = function analyze(micState) {
   if (micState === "on") {
@@ -119,6 +119,9 @@ var analyze = exports.analyze = function analyze(micState) {
 
     window.ticker = setInterval(function () {
       frequencyType(document.querySelector(".selected").innerText, frequencyData);
+      var progBar = document.getElementById("progress-bar");
+      var song = document.querySelector("audio");
+      progBar.style.width = song.currentTime / song.duration * progBar.parentElement.offsetWidth + "px";
     }, 100);
   }
 };
@@ -187,7 +190,7 @@ var showFrequencyCircle = exports.showFrequencyCircle = function showFrequencyCi
   var freqs = uniq(frequencyData).sort(function (a, b) {
     return b - a;
   });
-
+  document.getElementById("display").setAttribute("style", "align-items: center;");
   freqs.forEach(function (freq) {
     var circle = document.createElement("section");
     circle.className = "little-bar";
@@ -227,7 +230,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.setupAudio = undefined;
 
-var _metadata_util = __webpack_require__(7);
+var _metadata_util = __webpack_require__(6);
 
 var setupAudio = exports.setupAudio = function setupAudio(songFile, audio) {
   songFile.addEventListener("change", function (e) {
@@ -256,13 +259,14 @@ var addColorSelectors = exports.addColorSelectors = function addColorSelectors()
   document.querySelectorAll('.color-mark').forEach(function (mark) {
     mark.draggable = true;
     mark.addEventListener("drag", function (e) {
-      var offsetLeft = e.clientX - e.target.parentElement.offsetLeft;
+      var parent = e.target.parentElement;
+      var offsetLeft = e.clientX - parent.offsetLeft;
 
-      if (offsetLeft > 0) {
+      if (offsetLeft > 0 && offsetLeft < parent.offsetWidth - 5) {
         e.target.setAttribute("style", "margin-left: " + offsetLeft + "px;");
 
-        var field = "--" + e.target.parentElement.parentElement.parentElement.id + "-" + e.target.parentElement.className;
-        var newVal = 255 - Math.floor(255 / e.target.parentElement.offsetWidth * offsetLeft);
+        var field = "--" + parent.parentElement.parentElement.id + "-" + parent.className;
+        var newVal = 255 - Math.floor(255 / parent.offsetWidth * offsetLeft);
 
         document.getElementById("main").style.setProperty(field, newVal);
       }
@@ -284,11 +288,23 @@ exports.addMicListener = exports.setButtons = undefined;
 
 var _wave_util = __webpack_require__(0);
 
+var _screen_sizing = __webpack_require__(14);
+
 var setButtons = exports.setButtons = function setButtons(play, pause, audio) {
   play.addEventListener("click", function () {
     audio.play();
     play.style.color = "red";
     pause.style.color = "black";
+
+    document.getElementById("masthead").addEventListener("click", function (e) {
+      e.preventDefault();
+      (0, _screen_sizing.fullSize)();
+    });
+
+    document.querySelector("body").addEventListener("dblclick", function (e) {
+      e.preventDefault();
+      (0, _screen_sizing.normalSize)();
+    });
   });
 
   pause.addEventListener("click", function () {
@@ -359,39 +375,7 @@ var addTypeSelectors = exports.addTypeSelectors = function addTypeSelectors(osc,
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var colorDist = function colorDist(pos1, pos2) {
-  var xDist = Math.abs(pos1[0] - pos2[0]);
-  var yDist = Math.abs(pos1[1] - pos2[1]);
-
-  var absDist = Math.floor(Math.sqrt(xDist ** 2 + yDist ** 2));
-
-  if (absDist >= 60) {
-    return 0;
-  } else {
-    return 255 - Math.floor(absDist / 60 * 255);
-  }
-};
-
-var toColor = exports.toColor = function toColor(circlePos) {
-  var red = colorDist(circlePos, [60, 0]);
-  var green = colorDist(circlePos, [8, 90]);
-  var blue = colorDist(circlePos, [112, 90]);
-  return [red, green, blue];
-};
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var _wave_util = __webpack_require__(0);
-
-var _color_util = __webpack_require__(5);
 
 var _type_selector = __webpack_require__(4);
 
@@ -459,7 +443,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -468,7 +452,7 @@ document.addEventListener("DOMContentLoaded", function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var jDataView = __webpack_require__(12);
+var jDataView = __webpack_require__(11);
 
 var updateSong = function updateSong(title, artist, file) {
   var titleField = document.getElementById("song-title");
@@ -502,7 +486,7 @@ var extractor = exports.extractor = function extractor(file) {
 };
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -623,7 +607,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // https://d3js.org Version 4.8.0. Copyright 2017 Mike Bostock.
@@ -17302,7 +17286,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -17392,7 +17376,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -17403,7 +17387,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {!function(factory) {
@@ -17747,10 +17731,10 @@ module.exports = Array.isArray || function (arr) {
     }(method.slice(3));
     return jDataView;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13).Buffer))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12).Buffer))
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17764,9 +17748,9 @@ module.exports = Array.isArray || function (arr) {
 
 
 
-var base64 = __webpack_require__(8)
-var ieee754 = __webpack_require__(10)
-var isArray = __webpack_require__(11)
+var base64 = __webpack_require__(7)
+var ieee754 = __webpack_require__(9)
+var isArray = __webpack_require__(10)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -19544,10 +19528,10 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 var g;
@@ -19572,6 +19556,36 @@ try {
 
 module.exports = g;
 
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var fullSize = exports.fullSize = function fullSize() {
+  document.getElementById("masthead").style.display = "none";
+  document.getElementById("underline").style.opacity = "0";
+  document.getElementById("controls").style.opacity = "0";
+  document.getElementById("customizer").style.opacity = "0";
+  document.getElementById("footer").style.opacity = "0";
+
+  document.getElementById("display").setAttribute("style", "transform: scale(1.5);");
+};
+
+var normalSize = exports.normalSize = function normalSize() {
+  document.getElementById("masthead").style.display = "flex";
+  document.getElementById("underline").style.opacity = "1";
+  document.getElementById("controls").style.opacity = "1";
+  document.getElementById("customizer").style.opacity = "1";
+  document.getElementById("footer").style.opacity = "1";
+
+  document.getElementById("display").setAttribute("style", "transform: scale(1);");
+};
 
 /***/ })
 /******/ ]);
